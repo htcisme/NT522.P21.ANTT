@@ -1,2 +1,3 @@
 # NT522.P21.ANTT
-Học máy ATTT
+
+Do Quang Trung
