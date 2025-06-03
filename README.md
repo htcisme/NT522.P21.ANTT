@@ -159,7 +159,7 @@ FraudGNN-RL achieves state-of-the-art performance:
 | Isolation Forest| 0.9350  | 0.3920 | 0.7450   | 67.20    |
 | LOF             | 0.9220  | 0.3750 | 0.7120   | 64.80    |
 | DeepAE          | 0.9720  | 0.5380 | 0.8520   | 81.50    |
-| **FraudGNN-RL** | **0.9774** | **0.8752** | **0.8957** | **91.51** |
+| **Our Methods** | **0.9774** | **0.8752** | **0.8957** | **91.51** |
 
 ---
 
@@ -185,11 +185,7 @@ FraudGNN-RL achieves state-of-the-art performance:
 ---
 
 ## 🔗 References
-- [1] Association of Certified Fraud Examiners. *Report to the Nations: 2020 Global Study on Occupational Fraud and Abuse*, 2020.
-- [4] Y. Cui, et al. *FraudGNN-RL: A graph neural network with reinforcement learning for adaptive financial fraud detection*. IEEE Open Journal of the Computer Society, 6:426-437, 2025.
-- [7] T. N. Kipf and M. Welling. *Semi-supervised classification with graph convolutional networks*. In Proceedings of the International Conference on Learning Representations (ICLR), 2017.
-- [10] H. B. McMahan, et al. *Communication-efficient learning of deep networks from decentralized data*. In Proceedings of the 20th International Conference on Artificial Intelligence and Statistics (AISTATS), 2017.
-- Additional references in [report.pdf](report/report.pdf).
+- CUI, Yiwen, et al. FraudGNN-RL: A Graph Neural Network With Reinforcement Learning for Adaptive Financial Fraud Detection. IEEE Open Journal of the Computer Society, 2025.
 
 ---
 
