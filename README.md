@@ -5,11 +5,14 @@ FraudGNN-RL is a cutting-edge financial fraud detection system that integrates *
 ---
 
 ## 👥 Team Members
-- **[Member 1 Name]** - Data Preprocessing, GNN Implementation
-- **[Member 2 Name]** - RL Agent Design, Threshold Optimization
-- **[Member 3 Name]** - Federated Learning Integration, Evaluation
-- **[Member 4 Name]** - System Architecture, Visualization
 
+| Name              | Student ID | Role   |
+|-------------------|------------|--------|
+| **Do Quang Trung**    | 23521673   | Leader |
+| **Nguyen Dinh Khang** | 23520694   | Member |
+| **Hoang Bao Phuoc**   | 23521231   | Member |
+
+  
 ---
 
 ## 🏫 Course Information
