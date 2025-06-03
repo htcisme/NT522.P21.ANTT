@@ -1,297 +1,197 @@
-# NT522.P21.ANTT - Machine Learning in Information Security
+# FraudGNN-RL: Adaptive Financial Fraud Detection with GNN and RL
 
-**FraudGNN-RL: Federated Credit Card Fraud Detection System**
+FraudGNN-RL is a cutting-edge financial fraud detection system that integrates **Graph Neural Networks (GNN)**, **Reinforcement Learning (RL)**, and **Federated Learning (FL)** to detect fraudulent transactions in credit card datasets. By modeling transactions as graphs, optimizing detection thresholds with RL, and preserving privacy via FL, the system achieves high recall and robust performance on imbalanced datasets.
 
-A comprehensive project implementing a federated learning-based credit card fraud detection system using Graph Neural Networks (GNNs) and Reinforcement Learning (RL) for enhanced privacy-preserving fraud detection.
+---
 
 ## 👥 Team Members
+- **[Member 1 Name]** - Data Preprocessing, GNN Implementation
+- **[Member 2 Name]** - RL Agent Design, Threshold Optimization
+- **[Member 3 Name]** - Federated Learning Integration, Evaluation
+- **[Member 4 Name]** - System Architecture, Visualization
 
-1. **Nguyen Dinh Khang**
-2. **Hoang Bao Phuoc**
-3. **Do Quang Trung**
+---
+
+## 🏫 Course Information
+- **Course Code**: NT522.P21.ANTT
+- **Course Title**: Machine Learning in Information Security
+- **Academic Year**: 2024-2025
+- **Institution**: University of Information Technology, Vietnam National University Ho Chi Minh City (UIT-VNUHCM)
+
+---
 
 ## 📋 Project Overview
+FraudGNN-RL addresses the challenge of detecting financial fraud in highly imbalanced datasets. Key features include:
+1. **Graph-Based Modeling**: Transactions are represented as graphs with PCA-transformed features (V1-V28) as node attributes.
+2. **GNN for Feature Learning**: A Temporal Self-Supervised Graph Convolutional Network (TSSGC) captures transaction patterns.
+3. **RL for Adaptive Thresholding**: A Deep Q-Network with Normalized Advantage Function (DQN-NAF) optimizes detection thresholds.
+4. **Federated Learning**: FedAvg ensures privacy-preserving model training across multiple clients.
+5. **Error Handling**: Robust handling of edge cases like empty graphs and NaN values.
 
-This project implements an advanced fraud detection system that combines:
-- **Federated Learning (FL)**: Enables collaborative learning across multiple financial institutions without sharing raw customer data
-- **Graph Neural Networks (GNNs)**: Captures complex spatial and temporal relationships between transactions
-- **Reinforcement Learning (RL)**: Adaptively optimizes detection thresholds and feature weights
-- **Privacy-Preserving Design**: Maintains data confidentiality while achieving high detection performance
+The system outperforms traditional methods (e.g., XGBoost, Isolation Forest) in metrics like **Recall@5%**, **F1 Score**, **AUC-ROC**, and **AUC-PR**.
 
-## 🎯 Objectives
+---
 
-- **Privacy Protection**: Use Federated Learning to avoid sharing raw data between banks
-- **Complex Pattern Detection**: Apply GNNs to capture temporal and spatial transaction relationships
-- **Adaptive Optimization**: Use RL for automatic threshold and feature weight adjustment
-- **Imbalanced Data Handling**: Address the low fraud rate challenge in real-world scenarios
+## 🗃️ Dataset Characteristics
+- **Source**: Credit Card Fraud Detection Dataset (2023)
+- **Features**: Time, Amount, V1-V28 (anonymized PCA components), Class
+- **Size**: 550,000 transactions
+- **Challenge**: Highly imbalanced (~0.172% fraud transactions, 946 fraudulent transactions)
+- **Access**: Available on Kaggle ([link](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023))
+
+---
 
 ## 🏗️ System Architecture
+The FraudGNN-RL pipeline includes:
+1. **Data Preprocessing**: Transaction data is converted into graphs with nodes (transactions) and edges (similarity-based connections).
+2. **GNN Module**: TSSGC learns node embeddings for fraud classification.
+3. **RL Module**: DQN-NAF dynamically adjusts detection thresholds to maximize **F1 - 0.3 × FPR**.
+4. **FL Module**: FedAvg aggregates local models from multiple clients without sharing raw data.
+5. **Evaluation**: Metrics include F1, AUC-ROC, AUC-PR, and Recall@5%.
 
-### 1. **Federated Learning Framework**
-```
-Central Server ← → Multiple Clients (Banks)
-├── Model Aggregation (FedAvg)
-├── Global Model Distribution
-└── Privacy-Preserving Training
-```
+![Architecture Diagram](assets/architecture.png)
 
-### 2. **Graph Neural Network Architecture**
-```
-SimpleTSSGCNet:
-├── Spatial Modeling (GCN)
-│   ├── GCN Layer 1 + BatchNorm + ReLU
-│   └── GCN Layer 2 + BatchNorm + ReLU
-├── Temporal Modeling (GRU)
-│   ├── Time-aware Attention
-│   └── GRU Processing
-└── Fusion & Classification
-    ├── Concatenate [Spatial + Temporal]
-    ├── Dropout
-    └── Linear Output Layer
-```
+---
 
-### 3. **Reinforcement Learning Agent**
+## 📁 Project Structure
 ```
-DQN Agent:
-├── Shared Network (128-dim hidden)
-├── Q-Value Head (Threshold Selection)
-└── Feature Weight Head (Feature Importance)
+NT522.../
+├── img/                      # Image files (if any)
+├── report/                   # Report and evaluation files
+│   ├── evaluation/           # Evaluation documents
+│   │   ├── dinhkhang.pdf
+│   │   ├── hoangphuoc.pdf
+│   │   └── quangtrung.pdf
+│   ├── poster.pdf            # Project poster
+│   ├── report.pdf            # Detailed project report
+│   └── slides.pdf            # Presentation slides
+├── CreditCardFraud.py        # Main implementation for Kaggle
+└── LICENSE                   # Project license
 ```
 
-## 📊 Dataset and Preprocessing
+**Note**: On Kaggle, the dataset (`creditcard.csv`) is accessed directly from the input directory (e.g., `/kaggle/input/credit-card-fraud-detection-dataset-2023/creditcard.csv`).
 
-### Dataset Characteristics
-- **Source**: Credit Card Fraud Detection Dataset
-- **Features**: Time, Amount, V1-V28 (PCA components), Class
-- **Challenge**: Highly imbalanced (~0.17% fraud transactions)
-- **Size**: 284,807 transactions
-
-### Graph Construction Strategy
-- **Nodes**: Individual transactions
-- **Edge Criteria**:
-  - **Temporal proximity**: Within 1-hour time window
-  - **Feature similarity**: Cosine similarity > 0.9 threshold
-  - **Max neighbors**: 30 transactions per node
-
-### Data Preprocessing Pipeline
-1. **Feature Standardization**: StandardScaler for all numerical features
-2. **Optional Oversampling**: RandomOverSampler to achieve 2% fraud ratio
-3. **Client Distribution**: Random split across federated clients
-4. **Graph Construction**: Build transaction relationship graphs
-
-## 🔧 Key Components
-
-### 1. **Graph Builder** (`build_graph_from_cc_df`)
-- Constructs transaction graphs from raw data
-- Connects nodes based on temporal and feature similarity
-- Optimized batch processing for efficiency
-
-### 2. **GNN Model** (`SimpleTSSGCNet`)
-- **Spatial Component**: GCN layers for spatial relationship learning
-- **Temporal Component**: GRU with time-aware attention mechanism
-- **Output**: Node embeddings for classification
-
-### 3. **RL Agent** (`DQNAgent`)
-- **State Space**: Graph embeddings from GNN
-- **Action Space**: Threshold selection + Feature weighting
-- **Reward Function**: F1 score - λ × False Positive Rate
-
-### 4. **Federated Training** (`federated_training_ieee`)
-- Orchestrates FL training rounds
-- Manages local training on each client
-- Performs global model aggregation
-- Collects RL experience and updates agent
-
-## 📈 Evaluation Metrics
-
-### Primary Performance Metrics
-- **F1 Score**: Harmonic mean of precision and recall
-- **AUC-PR**: Area Under Precision-Recall Curve
-- **AUC-ROC**: Area Under ROC Curve
-- **Recall@k%**: Recall within top k% predictions
-
-### Reward Function Design
-```python
-reward = f1_score - λ × false_positive_rate
-```
-Where λ = 0.3 balances fraud detection vs. false alarm reduction.
-
-## ⚙️ Configuration Parameters
-
-### Model Hyperparameters
-```python
-config = {
-    # GNN Settings
-    'gnn_hidden_dim': 64,
-    'gnn_dropout': 0.5,
-    'gnn_lr': 1e-3,
-    
-    # RL Settings
-    'rl_lr': 1e-4,
-    'rl_epsilon_start': 1.0,
-    'rl_epsilon_decay': 0.998,
-    'rl_gamma': 0.99,
-    
-    # Federated Learning
-    'num_clients': 10,
-    'fl_rounds': 100,
-    'fl_clients_per_round': 3,
-    'fl_local_epochs': 1,
-    
-    # Graph Construction
-    'graph_max_neighbors': 30,
-    'graph_time_window': 3600,  # 1 hour
-    'graph_similarity_threshold': 0.9,
-}
-```
+---
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-```bash
-pip install torch torch-geometric pandas numpy scikit-learn matplotlib seaborn imbalanced-learn
-```
+- **Python**: 3.8+ (pre-installed on Kaggle)
+- **Hardware**: GPU with CUDA support available on Kaggle
+- **Dependencies** (pre-installed or installable on Kaggle):
+  ```bash
+  pip install torch==1.8.0 torch-geometric==2.0.1 pandas numpy scikit-learn matplotlib seaborn imbalanced-learn
+  ```
+
+### Installation
+1. Upload the project files to a Kaggle notebook:
+   - Create a new Kaggle notebook.
+   - Upload `CreditCardFraud.py`, `poster.pdf`, `report.pdf`, `slides.pdf`, and evaluation PDFs to the notebook environment.
+2. Add the dataset:
+   - Import the "Credit Card Fraud Detection Dataset 2023" from Kaggle ([link](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023)) to your notebook.
 
 ### Data Setup
-1. Download Credit Card Fraud Detection Dataset
-2. Update path in `config['csv_file_path']`
+- The dataset is automatically available in the Kaggle input directory.
+- Update the dataset path in `CreditCardFraud.py` if needed:
+  ```python
+  config['csv_file_path'] = '/kaggle/input/credit-card-fraud-detection-dataset-2023/creditcard.csv'
+  ```
 
 ### Running the System
-```python
-python CreditCardFraud.py
-```
-
-### Resume Training
-- Checkpoints automatically saved every 5 rounds
-- System auto-loads latest checkpoint on restart
-
-## 📁 Project Structure
-
-```
-NT522.P21.ANTT/
-├── LICENSE                    # Apache 2.0 License
-├── README.md                 # This documentation
-├── CreditCardFraud.py        # Main implementation
-├── models/                   # Saved models directory
-│   ├── final_gnn_model.pth
-│   ├── final_rl_agent.pth
-│   └── model_metadata.json
-├── checkpoints/              # Training checkpoints
-│   └── checkpoint.pth
-├── fraudgnnrl_metrics.png    # Training visualization
-├── report/                   # Project documentation
-│   ├── poster.pdf           # Academic poster
-│   ├── report.pdf           # Comprehensive report
-│   └── slides.pdf           # Presentation slides
-└── evaluation/              # Individual evaluations
-    ├── dinhkhang.pdf
-    ├── hoangphuc.pdf
-    └── quangtrung.pdf
-```
-
-## 🔄 Training Pipeline
-
-1. **Data Loading & Preprocessing**
-   - Load and preprocess transaction data
-   - Apply feature scaling and optional oversampling
-
-2. **Federated Environment Setup**
-   - Distribute data across simulated clients
-   - Initialize GNN and RL models
-
-3. **Training Loop**
-   ```
-   For each FL round:
-   ├── Select random subset of clients
-   ├── Build transaction graphs for clients
-   ├── Perform local GNN training
-   ├── Aggregate global model weights (FedAvg)
-   ├── Collect RL experience from predictions
-   ├── Train RL agent with collected experience
-   └── Update target networks periodically
-   ```
-
-4. **Model Evaluation & Saving**
-   - Generate performance metrics
-   - Save trained models and metadata
-   - Create training visualization plots
-
-## 🎯 Expected Results
-
-- **High F1 Score**: Balanced precision-recall performance
-- **Low False Positive Rate**: Minimized false alarms
-- **Good Recall@1%**: Detect majority of fraud in top 1% suspicious transactions
-- **Privacy Preservation**: No raw data sharing between clients
-- **Adaptive Performance**: RL-driven threshold optimization
-
-## 🔧 Special Features
-
-### 1. **Robust Checkpointing System**
-- Automatic checkpoint saving every 5 rounds
-- Complete training state preservation
-- Seamless training resumption
-
-### 2. **Early Stopping Mechanism**
-- Monitors AUC-PR with patience=15 rounds
-- Prevents overfitting and saves computational resources
-
-### 3. **Adaptive Learning**
-- RL agent automatically adjusts detection thresholds
-- Dynamic feature weighting for optimal performance
-
-### 4. **Error Handling**
-- Graceful handling of edge cases (empty graphs, NaN values)
-- Robust system degradation under adverse conditions
-
-## 📚 Technical Innovations
-
-### Graph-based Transaction Modeling
-- Novel approach to represent transactions as graph nodes
-- Temporal and similarity-based edge construction
-- Captures complex fraud patterns through graph structure
-
-### Federated Privacy-Preserving Learning
-- Enables collaborative fraud detection across institutions
-- Maintains strict data privacy requirements
-- Aggregates knowledge without exposing sensitive information
-
-### Reinforcement Learning Optimization
-- Adaptive threshold selection for dynamic fraud patterns
-- Feature importance weighting for improved detection
-- Continuous learning from detection outcomes
-
-## 📖 Documentation
-
-### Academic Reports
-- **[report.pdf](report/report.pdf)**: Comprehensive technical documentation
-- **[slides.pdf](report/slides.pdf)**: Project presentation materials
-- **[poster.pdf](report/poster.pdf)**: Academic poster summary
-
-### Individual Contributions
-- **[dinhkhang.pdf](evaluation/dinhkhang.pdf)**: Dinh Khang's evaluation
-- **[hoangphuc.pdf](evaluation/hoangphuc.pdf)**: Hoang Phuc's evaluation  
-- **[quangtrung.pdf](evaluation/quangtrung.pdf)**: Quang Trung's evaluation
-
-## 🏫 Course Information
-
-- **Course Code**: NT522.P21.ANTT
-- **Course Title**: Machine Learning in Information Security
-- **Academic Year**: 2024-2025
-- **Institution**: [University Name]
-
-## 📄 License
-
-This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details.
-
-## 🔗 References
-
-- Graph Neural Networks for Fraud Detection
-- Federated Learning Frameworks and Applications
-- Deep Reinforcement Learning for Adaptive Systems
-- Credit Card Fraud Detection Benchmarks and Datasets
+1. Open the Kaggle notebook and add `CreditCardFraud.py` as the main script.
+2. Run the notebook:
+   - Execute all cells to train and evaluate the model.
+   - Checkpoints and models are saved in the Kaggle output directory (e.g., `/kaggle/working/`).
+3. Results (metrics and visualizations) are logged to the notebook output and saved in the working directory.
 
 ---
 
-**Disclaimer**: This is an academic research project for educational purposes. Production deployment would require additional validation, security measures, and regulatory compliance considerations.
+## 🔧 Configuration Parameters
+Key configurations in `CreditCardFraud.py`:
+```python
+config = {
+    # GNN Settings
+    'gnn_hidden_dim': 64,
+    'gnn_dropout': 0.3,
+    'gnn_lr': 1e-3,
+    'graph_max_neighbors': 10,
+    
+    # RL Settings
+    'threshold_num_actions': 100,
+    'rl_lr': 1e-4,
+    'rl_batch_size': 32,
+    
+    # FL Settings
+    'num_clients': 5,
+    'fl_rounds': 10,
+    
+    # Training Settings
+    'num_epochs': 50,
+    'batch_size': 128,
+    'checkpoint_save_path': '/kaggle/working/checkpoint.pth'
+}
+```
 
-**Contact**: For questions about this project, please refer to the individual evaluation documents for team member contact information.
+---
+
+## 📊 Primary Performance Metrics
+- **F1 Score**: Harmonic mean of precision and recall
+- **AUC-PR**: Area Under Precision-Recall Curve
+- **AUC-ROC**: Area Under ROC Curve
+- **Recall@5%**: Recall within top 5% predictions
+
+---
+
+## 🎯 Expected Results
+FraudGNN-RL achieves state-of-the-art performance:
+- **F1 Score**: 0.9280 (vs. XGBoost: 0.7830, GCN: 0.8957)
+- **AUC-ROC**: 0.9960
+- **AUC-PR**: 0.7697
+- **Recall@5%**: 0.9780 (detects most frauds in top 5% suspicious transactions)
+- **False Positive Rate**: Minimized via RL reward function (F1 - 0.3 × FPR)
+- **Privacy**: Ensured via Federated Learning with FedAvg
+- **Adaptivity**: RL-driven dynamic threshold and feature weighting
+
+### Detailed Results
+| Method          | AUC-ROC | AUC-PR | F1 Score | Recall@5% |
+|-----------------|---------|--------|----------|-----------|
+| XGBoost         | 0.9570  | 0.4380 | 0.7830   | 0.7210    |
+| Isolation Forest| 0.9350  | 0.3920 | 0.7450   | 0.6720    |
+| DeepAE          | 0.9720  | 0.5380 | 0.8520   | 0.8150    |
+| GCN             | 0.9744  | 0.8720 | 0.8957   | 0.9151    |
+| **FraudGNN-RL** | **0.9960** | **0.7697** | **0.9280** | **0.9780** |
+
+---
+
+## 🛠️ Troubleshooting
+- **File Not Found Error**: Ensure the dataset is imported and `config['csv_file_path']` points to `/kaggle/input/credit-card-fraud-detection-dataset-2023/creditcard.csv`.
+- **Checkpoint Loading Failure**: Verify `config['checkpoint_save_path']` matches the Kaggle working directory (e.g., `/kaggle/working/checkpoint.pth`).
+- **NaN Metrics**: Check for imbalanced client data; enable oversampling via `imbalanced-learn`.
+- **Memory Issues**: Reduce `graph_max_neighbors` or `num_clients` for resource-constrained Kaggle sessions.
+
+---
+
+## ⚠️ Limitations and Future Work
+### Limitations
+- Lower AUC-PR compared to GCN due to RL prioritization of Recall@5%.
+- High computational cost in federated settings.
+- Limited interpretability due to PCA-transformed features.
+
+### Future Work
+- Integrate Explainable AI (e.g., SHAP, GNNExplainer) for better interpretability.
+- Optimize computational efficiency via model compression.
+- Extend to online learning for real-time fraud detection.
+
+---
+
+## 🔗 References
+- [1] Association of Certified Fraud Examiners. *Report to the Nations: 2020 Global Study on Occupational Fraud and Abuse*, 2020.
+- [4] Y. Cui, et al. *FraudGNN-RL: A graph neural network with reinforcement learning for adaptive financial fraud detection*. IEEE Open Journal of the Computer Society, 6:426-437, 2025.
+- [7] T. N. Kipf and M. Welling. *Semi-supervised classification with graph convolutional networks*. In Proceedings of the International Conference on Learning Representations (ICLR), 2017.
+- [10] H. B. McMahan, et al. *Communication-efficient learning of deep networks from decentralized data*. In Proceedings of the 20th International Conference on Artificial Intelligence and Statistics (AISTATS), 2017.
+- Additional references in [report.pdf](report/report.pdf).
+
+---
+
+## 📬 Contact
+For questions, contact the team via [team.email@example.com] or refer to [report.pdf](report/report.pdf) and [poster.pdf](report/poster.pdf) for individual evaluation details.
