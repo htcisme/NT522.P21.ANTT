@@ -1,4 +1,4 @@
-# FraudGNN-RL: Adaptive Financial Fraud Detection with GNN and RL
+# FraudGNN-RL: A Graph Neural Network with Reinforcement Learning for Adaptive Financial Fraud Detection
 
 FraudGNN-RL is a cutting-edge financial fraud detection system that integrates **Graph Neural Networks (GNN)**, **Reinforcement Learning (RL)**, and **Federated Learning (FL)** to detect fraudulent transactions in credit card datasets. By modeling transactions as graphs, optimizing detection thresholds with RL, and preserving privacy via FL, the system achieves high recall and robust performance on imbalanced datasets.
 
@@ -52,7 +52,7 @@ The FraudGNN-RL pipeline includes:
 4. **FL Module**: FedAvg aggregates local models from multiple clients without sharing raw data.
 5. **Evaluation**: Metrics include F1, AUC-ROC, AUC-PR, and Recall@5%.
 
-![Architecture Diagram](assets/architecture.png)
+![Architecture Diagram](img/Federated%20GNN%20Based%20Fraud%20Detection%20Pipeline%20with%20RL%20Driven%20Adaptation.png)
 
 ---
 
@@ -89,7 +89,7 @@ NT522.../
 ### Installation
 1. Upload the project files to a Kaggle notebook:
    - Create a new Kaggle notebook.
-   - Upload `CreditCardFraud.py`, `poster.pdf`, `report.pdf`, `slides.pdf`, and evaluation PDFs to the notebook environment.
+   - Upload `CreditCardFraud.py`.
 2. Add the dataset:
    - Import the "Credit Card Fraud Detection Dataset 2023" from Kaggle ([link](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023)) to your notebook.
 
@@ -147,22 +147,19 @@ config = {
 
 ## 🎯 Expected Results
 FraudGNN-RL achieves state-of-the-art performance:
-- **F1 Score**: 0.9280 (vs. XGBoost: 0.7830, GCN: 0.8957)
-- **AUC-ROC**: 0.9960
-- **AUC-PR**: 0.7697
-- **Recall@5%**: 0.9780 (detects most frauds in top 5% suspicious transactions)
-- **False Positive Rate**: Minimized via RL reward function (F1 - 0.3 × FPR)
-- **Privacy**: Ensured via Federated Learning with FedAvg
-- **Adaptivity**: RL-driven dynamic threshold and feature weighting
+- **F1**: 0.8957
+- **AUC-ROC**: 0.9771
+- **AUC-PR**: 0.8752
+- **Recall@5%**: 91.51 
 
 ### Detailed Results
-| Method          | AUC-ROC | AUC-PR | F1 Score | Recall@5% |
+| Method          | AUC-ROC | AUC-PR | F1 Score | Recall@1% |
 |-----------------|---------|--------|----------|-----------|
-| XGBoost         | 0.9570  | 0.4380 | 0.7830   | 0.7210    |
-| Isolation Forest| 0.9350  | 0.3920 | 0.7450   | 0.6720    |
-| DeepAE          | 0.9720  | 0.5380 | 0.8520   | 0.8150    |
-| GCN             | 0.9744  | 0.8720 | 0.8957   | 0.9151    |
-| **FraudGNN-RL** | **0.9960** | **0.7697** | **0.9280** | **0.9780** |
+| XGBoost         | 0.9570  | 0.4380 | 0.7830   | 72.10    |
+| Isolation Forest| 0.9350  | 0.3920 | 0.7450   | 67.20    |
+| LOF             | 0.9220  | 0.3750 | 0.7120   | 64.80    |
+| DeepAE          | 0.9720  | 0.5380 | 0.8520   | 81.50    |
+| **FraudGNN-RL** | **0.9774** | **0.8752** | **0.8957** | **91.51** |
 
 ---
 
