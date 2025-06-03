@@ -190,4 +190,4 @@ FraudGNN-RL achieves state-of-the-art performance:
 ---
 
 ## 📬 Contact
-For questions, contact the team via [team.email@example.com] or refer to [report.pdf](report/report.pdf) and [poster.pdf](report/poster.pdf) for individual evaluation details.
+For questions, contact the team via [23521673@gm.uit.edu.vn] for individual evaluation details.
