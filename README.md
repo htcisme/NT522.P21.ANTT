@@ -58,7 +58,7 @@ The FraudGNN-RL pipeline includes:
 
 ## 📁 Project Structure
 ```
-NT522.../
+NT522.P21.ANTT/
 ├── img/                      # Image files (if any)
 ├── report/                   # Report and evaluation files
 │   ├── evaluation/           # Evaluation documents
